@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.github.tonybaines.gestalt.Configurations;
-import com.github.tonybaines.gestalt.ValidationResult;
+import com.github.tonybaines.gestalt.validation.ValidationResult;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 
