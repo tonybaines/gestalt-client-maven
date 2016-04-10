@@ -1,21 +1,19 @@
 package gestalt;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
 import com.github.tonybaines.gestalt.Configurations;
 import com.github.tonybaines.gestalt.validation.ValidationResult;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
+import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.*;
 
 public class XmlConfigTest {
     @Test
     public void readsAnXmlConfigFileAndMakesThePropertiesAvailable() {
-        TestConfig testConfig = Configurations.definedBy(TestConfig.class).fromXmlResource("common.xml").done();
+        TestConfig testConfig = Configurations
+          .definedBy(TestConfig.class)
+          .fromXmlResource("common.xml")
+          .done();
 
         assertThat(testConfig.getIntValue(), is(5));
         assertThat(testConfig.getStringValue(), is("Five"));
@@ -27,11 +25,7 @@ public class XmlConfigTest {
         assertThat(testConfig.getStrings().get(2), is("C"));
         assertThat(testConfig.getHandedness(), is(Handed.left));
         assertThat(testConfig.getNonExistentDoubleWithDefault(), is(42.5));
-        FluentIterable.from(testConfig.getThings()).anyMatch(new Predicate<TestConfig.Thing>() {
-            public boolean apply(TestConfig.Thing thing) {
-                return thing.getId().equals("alpha");
-            }
-        });
+        testConfig.getThings().stream().anyMatch(thing -> thing.getId().equals("alpha"));
     }
 
     @Test
@@ -42,7 +36,11 @@ public class XmlConfigTest {
 
     @Test
     public void constantsCanBeInjectedFromAPropertiesObject() throws Exception {
-        EnclosingInterface config = Configurations.definedBy(EnclosingInterface.class).fromGroovyConfigResource("simple-config-with-constant-refs.groovy").withConstantsFromResource("constants.properties").done();
+        EnclosingInterface config = Configurations
+          .definedBy(EnclosingInterface.class)
+          .fromGroovyConfigResource("simple-config-with-constant-refs.groovy")
+          .withConstantsFromResource("constants.properties")
+          .done();
 
         assertThat(config.getSimpleConfig().getName(), is("bar"));
         assertThat(config.getSimpleConfig().getLevel(), is(11));
